@@ -10,14 +10,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Install nodemon globally
+RUN npm install -g nodemon
+
 # Copy the rest of the application code
 COPY . .
-
-# Build the TypeScript code
-RUN npm run build
 
 # Expose the application port
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "dist/app.js"]
+# Start the application in development mode
+CMD ["nodemon", "src/app.ts"]
