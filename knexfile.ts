@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: "./migrations",
-      extension: "ts", // Important for TypeScript migrations
+      extension: "ts",
     },
   },
   production: {

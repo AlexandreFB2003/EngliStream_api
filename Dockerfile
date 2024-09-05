@@ -22,4 +22,4 @@ COPY .env .env
 EXPOSE 3000
 
 # Start the application in development mode
-CMD ["nodemon", "src/app.ts"]
+CMD ["sh", "-c", "yarn knex:migrate && nodemon src/app.ts"]

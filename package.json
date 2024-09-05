@@ -10,7 +10,7 @@
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
-    "knex:migrate": "ts-node -r tsconfig-paths/register ./node_modules/.bin/knex migrate:latest --knexfile knexfile.ts"
+    "knex:migrate": "npx knex migrate:latest --knexfile knexfile.ts"
   },
   "repository": {
     "type": "git",
