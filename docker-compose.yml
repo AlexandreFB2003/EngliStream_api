@@ -9,10 +9,12 @@ services:
       - db
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/mydb
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-
+    command: sh -c "yarn knex:migrate && yarn dev"
   db:
     image: postgres:13
     environment:
