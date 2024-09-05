@@ -1,10 +1,10 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { Pool } from "pg";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Database connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
@@ -14,11 +14,11 @@ pool
   .then(() => console.log("Connected to the database"))
   .catch((err) => console.error("Database connection error", err));
 
-// Middleware
 app.use(express.json());
 
-// Routes
-app.get("/", async (req: Request, res: Response) => {
+app.use("/auth", authRoutes);
+
+app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
     res.send(result.rows);
