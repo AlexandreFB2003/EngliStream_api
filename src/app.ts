@@ -1,6 +1,11 @@
 import express from "express";
 import { Pool } from "pg";
 import authRoutes from "./routes/authRoutes";
+import dotenv from "dotenv";
+import path from "path";
+
+const env = process.env.NODE_ENV || "development";
+dotenv.config({ path: path.resolve(__dirname, `../.env.${env}`) });
 
 const app = express();
 const port = process.env.PORT || 3000;

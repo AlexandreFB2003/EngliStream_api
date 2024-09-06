@@ -6,11 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
-    "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
-    "knex:migrate": "npx knex migrate:latest --knexfile knexfile.ts"
+    "start": "ts-node src/app.ts",
+    "knex:migrate": "npx knex migrate:latest --knexfile knexfile.ts",
+    "start:dev": "NODE_ENV=development yarn dev",
+    "start:uat": "NODE_ENV=uat yarn start",
+    "start:prod": "NODE_ENV=production yarn start"
   },
   "repository": {
     "type": "git",

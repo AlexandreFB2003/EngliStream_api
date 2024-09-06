@@ -15,7 +15,11 @@ export const signUp = async (req: Request, res: Response) => {
   }
 
   await createUser(email, password);
-  res.status(200).json({ message: "Sign up successful", user: data.user });
+  res.status(200).json({
+    message:
+      "Sign-up successful. Please check your email to confirm your account.",
+    user: data.user,
+  });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -37,6 +41,21 @@ export const login = async (req: Request, res: Response) => {
   });
 };
 
-export const profile = async (req: Request, res: Response) => {
-  res.status(200).json({ user: req?.user });
+export const profile = async (req: any, res: any) => {
+  const user = req.user;
+
+  res.status(200).json({
+    message: "Profile fetched successfully",
+    user: user,
+  });
+};
+
+export const logout = async (req: any, res: any) => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  res.status(200).json({ message: "Logout successful" });
 };

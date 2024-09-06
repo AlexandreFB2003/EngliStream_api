@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { supabase } from "../../config/supabase";
 
 export const isAuthenticated = async (
-  req: Request,
-  res: Response,
+  req: any,
+  res: any,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization;
+  console.log("GG TOKEN", token);
 
   if (!token) {
     return res.status(401).json({ message: "Authorization token missing" });
