@@ -9,5 +9,6 @@
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["src/**/*.ts", "knexfile.ts", "types/**/*.d.ts"]
+  "include": ["src/**/*.ts", "knexfile.ts", "types/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

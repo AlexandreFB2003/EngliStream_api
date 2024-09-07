@@ -3,9 +3,17 @@ import { Pool } from "pg";
 import authRoutes from "./routes/authRoutes";
 import dotenv from "dotenv";
 import path from "path";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const env = process.env.NODE_ENV || "development";
 dotenv.config({ path: path.resolve(__dirname, `../.env.${env}`) });
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: "Too many requests, please try again later.",
+});
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,8 +28,18 @@ pool
   .catch((err) => console.error("Database connection error", err));
 
 app.use(express.json());
+app.use(helmet());
+app.use(limiter);
 
 app.use("/auth", authRoutes);
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "trusted-scripts.com"],
+    },
+  })
+);
 
 app.get("/", async (req, res) => {
   try {
@@ -33,7 +51,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
 import { createUser, findUserByEmail } from "../models/user";
+import { validateUserInput } from "./schema/userSchema";
 
 export const signUp = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -9,6 +10,12 @@ export const signUp = async (req: Request, res: Response) => {
     email,
     password,
   });
+
+  const inputValidationError = validateUserInput(req);
+
+  if (inputValidationError) {
+    return res.status(400).json({ message: inputValidationError?.message });
+  }
 
   if (error) {
     return res.status(400).json({ message: error.message });
@@ -29,6 +36,12 @@ export const login = async (req: Request, res: Response) => {
     email,
     password,
   });
+
+  const inputValidationError = validateUserInput(req);
+
+  if (inputValidationError) {
+    return res.status(400).json({ message: inputValidationError?.message });
+  }
 
   if (error) {
     return res.status(400).json({ message: "Invalid credentials" });
