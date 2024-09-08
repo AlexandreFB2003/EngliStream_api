@@ -1,20 +1,34 @@
-import { Pool } from "pg";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+import { db } from "../config/knexConnection";
 
 export const findUserByEmail = async (email: string) => {
-  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
-  return result.rows[0];
+  const result = await db("users").where({ email }).first();
+  return result;
 };
 
-export const createUser = async (email: string, password: string) => {
-  const result = await pool.query(
-    "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
-    [email, password]
-  );
-  return result.rows[0];
+export const createUser = async (
+  uuid: string | undefined,
+  email: string,
+  password: string,
+  name: string
+) => {
+  const result = await db("users")
+    .insert({
+      id: uuid,
+      email,
+      password,
+      name,
+      is_subscribe: false,
+      permission: 3,
+      role: "student",
+    })
+    .returning("*");
+  return result[0];
+};
+
+// table.integer("permission");
+// });
+export const deleteUser = async (userId: string) => {
+  const result = await db("users").where({ id: userId }).del().returning("*");
+
+  return result[0];
 };

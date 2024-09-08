@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer("id").primary();
     table.string("title");
     table.text("body").comment("Content of the post");
-    table.integer("user_id").unsigned().references("id").inTable("users");
+    table.uuid("user_id").unsigned().references("id").inTable("users");
     table.string("status");
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.string("video_url");

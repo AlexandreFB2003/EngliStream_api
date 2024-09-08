@@ -7,7 +7,6 @@ export const isAuthenticated = async (
   next: NextFunction
 ) => {
   const token = req.headers.authorization;
-  console.log("GG TOKEN", token);
 
   if (!token) {
     return res.status(401).json({ message: "Authorization token missing" });

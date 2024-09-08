@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
 import { createUser, findUserByEmail } from "../models/user";
-import { validateUserInput } from "./schema/userSchema";
+import { validateUserSignIn, validateLogin } from "./schema/userSchema";
 
 export const signUp = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
   });
 
-  const inputValidationError = validateUserInput(req);
+  const inputValidationError = validateUserSignIn(req);
 
   if (inputValidationError) {
     return res.status(400).json({ message: inputValidationError?.message });
@@ -21,11 +21,11 @@ export const signUp = async (req: Request, res: Response) => {
     return res.status(400).json({ message: error.message });
   }
 
-  await createUser(email, password);
+  const user = await createUser(data.user?.id, email, password, name);
   res.status(200).json({
     message:
       "Sign-up successful. Please check your email to confirm your account.",
-    user: data.user,
+    user,
   });
 };
 
@@ -37,7 +37,7 @@ export const login = async (req: Request, res: Response) => {
     password,
   });
 
-  const inputValidationError = validateUserInput(req);
+  const inputValidationError = validateLogin(req);
 
   if (inputValidationError) {
     return res.status(400).json({ message: inputValidationError?.message });
@@ -56,10 +56,10 @@ export const login = async (req: Request, res: Response) => {
 
 export const profile = async (req: any, res: any) => {
   const user = req.user;
-
+  const profileInfo = await findUserByEmail(user?.email);
   res.status(200).json({
     message: "Profile fetched successfully",
-    user: user,
+    user: profileInfo,
   });
 };
 
