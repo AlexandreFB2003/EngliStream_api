@@ -1,6 +1,7 @@
 import express from "express";
 import { Pool } from "pg";
 import authRoutes from "./routes/authRoutes";
+import teachersRoutes from "./routes/teacherRoutes";
 import dotenv from "dotenv";
 import path from "path";
 import helmet from "helmet";
@@ -32,6 +33,7 @@ app.use(helmet());
 app.use(limiter);
 
 app.use("/auth", authRoutes);
+app.use("/teachers", teachersRoutes);
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
