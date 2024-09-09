@@ -28,7 +28,9 @@ export const createUser = async (
 // table.integer("permission");
 // });
 export const deleteUser = async (userId: string) => {
-  const result = await db("users").where({ id: userId }).del().returning("*");
+  await db("users").where({ id: userId }).del().returning("*");
+};
 
-  return result[0];
+export const updateLastSignin = async (uuid: string | undefined) => {
+  await db("users").where("id", "=", uuid).update({ last_signin: new Date() });
 };

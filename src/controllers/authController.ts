@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import { createUser, findUserByEmail } from "../models/user";
+import {
+  createUser,
+  findUserByEmail,
+  deleteUser,
+  updateLastSignin,
+} from "../models/user";
 import { validateUserSignIn, validateLogin } from "./schema/userSchema";
 
 export const signUp = async (req: Request, res: Response) => {
@@ -47,6 +52,8 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
+  await updateLastSignin(data.user.id);
+
   res.status(200).json({
     message: "Login successful",
     user: data.user,
@@ -71,4 +78,26 @@ export const logout = async (req: any, res: any) => {
   }
 
   res.status(200).json({ message: "Logout successful" });
+};
+
+export const deleteUserAccount = async (req: any, res: any) => {
+  const { email } = req.body;
+  const user = await findUserByEmail(email);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const { error: logoutError } = await supabase.auth.signOut();
+  console.log("GG LOGOUT ERROR", logoutError);
+  const { error } = await supabase.auth.admin.deleteUser(user.id, true);
+  // ver como fazer para deletar do supabase
+  if (error) {
+    return res
+      .status(400)
+      .json({ message: `Error deleting user: ${error.message}` });
+  }
+
+  await deleteUser(req);
+
+  res.status(200).json({ message: "User deleted successfully" });
 };

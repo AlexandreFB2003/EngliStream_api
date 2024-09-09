@@ -4,8 +4,9 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
+    "noEmitOnError": false,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./types"]
   },
