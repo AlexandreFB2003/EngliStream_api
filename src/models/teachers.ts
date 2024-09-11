@@ -21,3 +21,11 @@ export const getAll = async () => {
 export const getById = async (userId: string) => {
   return await db("teachers").where({ user_id: userId }).first();
 };
+
+export const update = async (id: string, { availability }) => {
+  const result = await db("teachers")
+    .where({ id })
+    .update({ availability })
+    .returning("*");
+  return result[0];
+};

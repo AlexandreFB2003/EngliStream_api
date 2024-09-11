@@ -4,13 +4,14 @@ import {
   deleteTeacher,
   getAllTeachers,
   getTeacherById,
+  updateAvailability,
 } from "../controllers/teachersController";
 
 const router = Router();
 
-router.post("/create", createTeacher);
-router.post("/remove", deleteTeacher);
-router.get("/getAll", getAllTeachers);
-router.get("/getById", getTeacherById); // ajustar como pegar o id
-
+router.post("/", createTeacher);
+router.delete("/:id", deleteTeacher);
+router.put("/:id", updateAvailability);
+router.get("/", getAllTeachers);
+router.get("/:email", getTeacherById);
 export default router;
