@@ -6,12 +6,14 @@ import {
   getPosts,
   updatePost,
 } from "../controllers/postsController";
+import { isAuthenticated } from "./middleware/authMiddleware";
 
 const router = Router();
 
-router.post("/", createPost);
-router.delete("/:id", deletePost);
-router.put("/:id", updatePost);
-router.get("/", getPosts);
-router.get("/:email", getPostById);
+router.post("/", isAuthenticated, createPost);
+router.delete("/:id", isAuthenticated, deletePost);
+router.put("/:id", isAuthenticated, updatePost);
+router.get("/", isAuthenticated, getPosts);
+router.get("/:email", isAuthenticated, getPostById);
+
 export default router;

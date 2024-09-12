@@ -21,10 +21,10 @@ export const createTeacher = async (req: Request, res: Response) => {
 };
 
 export const deleteTeacher = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const { id } = req.params;
 
   try {
-    const deletedTeacher = await remove(userId);
+    const deletedTeacher = await remove(id);
 
     if (!deletedTeacher.length) {
       return res.status(404).json({ message: "Teacher not found" });
