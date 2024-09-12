@@ -6,8 +6,6 @@ export const create = async ({
   scheduled_time,
   status,
   duration,
-  created_at,
-  updated_at,
 }) => {
   const result = await db("classes")
     .insert({
@@ -16,8 +14,6 @@ export const create = async ({
       scheduled_time,
       duration,
       status,
-      created_at,
-      updated_at,
     })
     .returning("*");
   return result[0];

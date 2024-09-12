@@ -4,6 +4,7 @@ import authRoutes from "./routes/authRoutes";
 import teachersRoutes from "./routes/teacherRoutes";
 import postsRoutes from "./routes/postsRoutes";
 import classesRoutes from "./routes/classesRoutes";
+import meetingsRoutes from "./routes/meetingsRoutes";
 import dotenv from "dotenv";
 import path from "path";
 import helmet from "helmet";
@@ -38,6 +39,7 @@ app.use("/auth", authRoutes);
 app.use("/teachers", teachersRoutes);
 app.use("/posts", postsRoutes);
 app.use("/classes", classesRoutes);
+app.use("/meetings", meetingsRoutes);
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
