@@ -13,8 +13,8 @@ const router = Router();
 
 router.post("/signup", signUp);
 router.post("/login", login);
-router.post("/logout", logout);
-router.put("/:id", updateUserAccount);
+router.post("/logout", isAuthenticated, logout);
+router.put("/update", isAuthenticated, updateUserAccount);
 
 router.get("/profile", isAuthenticated, profile);
 router.delete("/delete", isAuthenticated, deleteUserAccount);

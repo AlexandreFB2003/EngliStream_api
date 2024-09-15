@@ -9,10 +9,14 @@ import {
   updateUser,
 } from "../models/user";
 import { validateUserSignIn, validateLogin } from "./schema/userSchema";
+import { encryptPassword } from "../utils/encrypt";
+
+const secretKey = process.env.SECRET_KEY;
 
 export const signUp = async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
 
+  const encryptedPassword = encryptPassword(password, secretKey);
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -28,7 +32,7 @@ export const signUp = async (req: Request, res: Response) => {
     return res.status(400).json({ message: error.message });
   }
 
-  const user = await createUser(data.user?.id, email, password, name);
+  const user = await createUser(data.user?.id, email, encryptedPassword, name);
   res.status(200).json({
     message:
       "Sign-up successful. Please check your email to confirm your account.",
@@ -112,9 +116,8 @@ export const deleteUserAccount = async (req: any, res: any) => {
   res.status(200).json({ message: "User deleted successfully" });
 };
 
-export const updateUserAccount = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
+export const updateUserAccount = async (req: any, res: Response) => {
+  const id = req.user?.id;
   try {
     const updatedUser = await updateUser(id, req.body);
 

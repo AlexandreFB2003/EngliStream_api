@@ -14,6 +14,6 @@ router.post("/", isAuthenticated, createPost);
 router.delete("/:id", isAuthenticated, deletePost);
 router.put("/:id", isAuthenticated, updatePost);
 router.get("/", isAuthenticated, getPosts);
-router.get("/:email", isAuthenticated, getPostById);
+router.get("/:id", isAuthenticated, getPostById);
 
 export default router;
