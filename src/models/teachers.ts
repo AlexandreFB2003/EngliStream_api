@@ -1,10 +1,10 @@
 import { db } from "../config/knexConnection";
 
-export const create = async (userId: string | undefined) => {
+export const create = async ({ userId, availability = {} }) => {
   const result = await db("teachers")
     .insert({
       user_id: userId,
-      availability: "{}",
+      availability,
     })
     .returning("*");
   return result[0];

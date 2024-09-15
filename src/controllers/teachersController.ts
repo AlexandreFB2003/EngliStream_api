@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { create, getAll, getById, remove, update } from "../models/teachers";
 import { findUserByEmail } from "../models/user";
+import { validateTeacher } from "./schema/teacherSchema";
 
 export const createTeacher = async (req: Request, res: Response) => {
-  const { userId } = req.body;
-
   try {
-    const newTeacher = await create(userId);
+    const inputValidationError = validateTeacher(req);
+
+    if (inputValidationError) {
+      return res.status(400).json({ message: inputValidationError?.message });
+    }
+    const newTeacher = await create(req.body);
 
     res.status(201).json({
       message: "Teacher created successfully",

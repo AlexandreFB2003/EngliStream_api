@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
 import { create, getAll, getById, remove, update } from "../models/posts";
+import { validatePost } from "./schema/postsSchema";
 
 export const createPost = async (req: Request, res: Response) => {
   try {
+    const inputValidationError = validatePost(req);
+
+    if (inputValidationError) {
+      return res.status(400).json({ message: inputValidationError?.message });
+    }
     const newPost = await create(req.body);
 
     res

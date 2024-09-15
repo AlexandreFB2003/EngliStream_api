@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
 import { create, getAll, getById, remove, update } from "../models/classes";
+import { validateMeeting } from "./schema/meetingsSchema";
 
 export const createMeetings = async (req: Request, res: Response) => {
   try {
+    const inputValidationError = validateMeeting(req);
+
+    if (inputValidationError) {
+      return res.status(400).json({ message: inputValidationError?.message });
+    }
     const newMeeting = await create(req.body);
     res
       .status(201)
