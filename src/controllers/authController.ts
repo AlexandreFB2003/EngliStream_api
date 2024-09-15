@@ -5,6 +5,8 @@ import {
   findUserByEmail,
   deleteUser,
   updateLastSignin,
+  updateIsEmailConfirmed,
+  updateUser,
 } from "../models/user";
 import { validateUserSignIn, validateLogin } from "./schema/userSchema";
 
@@ -52,8 +54,16 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
+  if (!data.user?.email_confirmed_at) {
+    return res
+      .status(400)
+      .json({ message: "Please confirm your e-mail to sign in" });
+  }
+  const user = await findUserByEmail(data.user.email);
+  if (!user?.last_signin) {
+    await updateIsEmailConfirmed(data.user.id);
+  }
   await updateLastSignin(data.user.id);
-
   res.status(200).json({
     message: "Login successful",
     user: data.user,
@@ -90,7 +100,7 @@ export const deleteUserAccount = async (req: any, res: any) => {
   const { error: logoutError } = await supabase.auth.signOut();
   console.log("GG LOGOUT ERROR", logoutError);
   const { error } = await supabase.auth.admin.deleteUser(user.id, true);
-  // ver como fazer para deletar do supabase
+
   if (error) {
     return res
       .status(400)
@@ -100,4 +110,24 @@ export const deleteUserAccount = async (req: any, res: any) => {
   await deleteUser(req);
 
   res.status(200).json({ message: "User deleted successfully" });
+};
+
+export const updateUserAccount = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const updatedUser = await updateUser(id, req.body);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "User updated successfully", post: updatedUser });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: "Error updating user", error: error.message });
+  }
 };

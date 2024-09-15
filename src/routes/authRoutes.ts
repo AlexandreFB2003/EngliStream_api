@@ -5,6 +5,7 @@ import {
   profile,
   logout,
   deleteUserAccount,
+  updateUserAccount,
 } from "../controllers/authController";
 import { isAuthenticated } from "./middleware/authMiddleware";
 
@@ -13,8 +14,9 @@ const router = Router();
 router.post("/signup", signUp);
 router.post("/login", login);
 router.post("/logout", logout);
+router.put("/:id", updateUserAccount);
 
 router.get("/profile", isAuthenticated, profile);
-router.post("/delete", isAuthenticated, deleteUserAccount);
+router.delete("/delete", isAuthenticated, deleteUserAccount);
 
 export default router;

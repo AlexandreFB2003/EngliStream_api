@@ -25,12 +25,25 @@ export const createUser = async (
   return result[0];
 };
 
-// table.integer("permission");
-// });
 export const deleteUser = async (userId: string) => {
   await db("users").where({ id: userId }).del().returning("*");
 };
 
 export const updateLastSignin = async (uuid: string | undefined) => {
   await db("users").where("id", "=", uuid).update({ last_signin: new Date() });
+};
+
+export const updateIsEmailConfirmed = async (uuid: string | undefined) => {
+  await db("users").where("id", "=", uuid).update({ is_email_confirmed: true });
+};
+
+export const updateUser = async (
+  id: string,
+  { email, name, password, is_subscribe, subscribe_date }
+) => {
+  const result = await db("posts")
+    .where({ id })
+    .update({ email, name, password, is_subscribe, subscribe_date })
+    .returning("*");
+  return result[0];
 };
