@@ -5,6 +5,13 @@ import { validateTeacher } from "./schema/teacherSchema";
 
 export const createTeacher = async (req: Request, res: Response) => {
   try {
+    const { user_id } = req.body;
+
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    
+
     const inputValidationError = validateTeacher(req);
 
     if (inputValidationError) {

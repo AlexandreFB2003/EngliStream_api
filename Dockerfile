@@ -19,5 +19,6 @@ COPY . .
 # Expose the application port
 EXPOSE 3000
 
+
 # Start the application in development mode
 CMD ["sh", "-c", "yarn knex:migrate && nodemon src/app.ts"]

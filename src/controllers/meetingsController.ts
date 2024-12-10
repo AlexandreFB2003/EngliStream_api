@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { create, getAll, getById, remove, update } from "../models/classes";
+import { create, getAll, getById, remove, update } from "../models/meetings";
 import { validateMeeting } from "./schema/meetingsSchema";
 
 export const createMeetings = async (req: Request, res: Response) => {

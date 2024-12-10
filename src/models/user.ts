@@ -26,6 +26,7 @@ export const createUser = async (
 };
 
 export const deleteUser = async (userId: string) => {
+  await db("teachers").where({ user_id: userId }).del();
   await db("users").where({ id: userId }).del().returning("*");
 };
 

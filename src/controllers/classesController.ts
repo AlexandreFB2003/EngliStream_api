@@ -1,9 +1,27 @@
 import { Request, Response } from "express";
 import { create, getAll, getById, remove, update } from "../models/classes";
+import { getById as getTeacherByUserId } from '../models/teachers';
+import { validateClasse } from "./schema/classesSchema";
 
 export const createClass = async (req: Request, res: Response) => {
   try {
-    const newClass = await create(req.body);
+    const inputValidationError = validateClasse(req);
+
+    if (inputValidationError) {
+      return res.status(400).json({ message: inputValidationError?.message });
+    }
+
+    const { user_id } = req.body;
+
+    const teacher = await getTeacherByUserId(user_id);
+
+    if (teacher) {
+      return res.status(400).json({
+        message: "Teachers cannot be part of the classes",
+      });
+    }
+
+    const newClass = await create(req.body); 
     res
       .status(201)
       .json({ message: "Class created successfully", post: newClass });
@@ -51,6 +69,17 @@ export const updateClass = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
+
+    const { user_id } = req.body;
+
+    const teacher = await getTeacherByUserId(user_id);
+
+    if (teacher) {
+      return res.status(400).json({
+        message: "Teachers cannot be part of the classes",
+      });
+    }
+
     const updatedClass = await update(id, req.body);
 
     if (!updatedClass) {
